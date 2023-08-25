@@ -21,8 +21,9 @@ Route::get('/', function () {
 });
 Route::get('/registration', [CustomAuthController::class, 'registration']);
 Route::post('/register', [CustomAuthController::class, 'register'])->name('register'); 
-Route::get('/verify/{token}', [VerificationController::class, 'verify'])->name('verify');
+// Route::get('/verify/{token}', [VerificationController::class, 'verify'])->name('verify');
 Route::post('/verify/resend', [VerificationController::class, 'resend'])->name('verify.resend');
+Route::get('/verify/{verification_token}', [VerificationController::class, 'verify'])->name('verify');
 
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users.index');
