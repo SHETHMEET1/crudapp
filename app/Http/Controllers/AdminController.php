@@ -21,6 +21,39 @@ class AdminController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
+    public function updateStatus(Request $request, User $user)
+{
+    $request->validate([
+        'status' => 'required|in:active,inactive',
+    ]);
+
+    $user->update(['status' => $request->status]);
+
+    return redirect()->route('admin.users.index')->with('success', 'User status updated successfully.');
+}
+public function destroyBulk(Request $request)
+{
+    $userIds = $request->input('user_ids', []);
+
+    User::whereIn('id', $userIds)->delete();
+
+    return redirect()->route('admin.users.index')->with('success', 'Selected users deleted successfully.');
+}
+
+public function updateBulkStatus(Request $request)
+{
+    $request->validate([
+        'status' => 'required|in:active,inactive',
+        'user_ids' => 'required|array',
+    ]);
+
+    $status = $request->status;
+    $userIds = $request->user_ids;
+
+    User::whereIn('id', $userIds)->update(['status' => $status]);
+
+    return redirect()->route('admin.users.index')->with('success', 'Selected users updated successfully.');
+}
 
     public function edit(User $user)
     {
